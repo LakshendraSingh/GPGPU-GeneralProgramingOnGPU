@@ -1,6 +1,6 @@
 # GPGPU: General Programming on GPU
 
-A high-performance, in-browser Multi-Paradigm GPU Compute Studio supporting 10 GPGPU programming paradigms executing directly on physical GPU silicon via WebGPU and WebAssembly.
+A high-performance, in-browser Multi-Paradigm GPU Compute platform supporting 10 GPGPU programming paradigms executing directly on physical GPU silicon via WebGPU and WebAssembly.
 
 ---
 
@@ -68,7 +68,7 @@ The compute pipeline executes on physical GPU silicon without requiring remote s
 - A browser with WebGPU support enabled (Google Chrome, Microsoft Edge, or Chromium 113+).
 - Either **Node.js** (v16+) or **Python 3**.
 
-### Launching the Studio
+### Running the Application
 
 #### Option A: Node.js (Zero external dependencies)
 ```bash
@@ -103,8 +103,8 @@ Opening `index.html` directly via `file://` disables `SharedArrayBuffer`, preven
 .
 |-- dist/
 |   |-- index.html              # Main HTML entry point
-|   |-- gpgpu_studio.js         # Unified GPGPU Studio engine (JS distribution)
-|   |-- gpgpu_studio.ts         # Unified GPGPU Studio engine (TypeScript source)
+|   |-- gpgpu.js                # Unified GPGPU compute engine (JS distribution)
+|   |-- gpgpu.ts                # Unified GPGPU compute engine (TypeScript source)
 |   |-- glslang.js              # Khronos glslang WebAssembly compiler
 |   |-- twgsl.js                # Google Tint WebAssembly translator
 |   |-- twgsl.wasm              # Google Tint WebAssembly binary

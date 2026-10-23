@@ -8,7 +8,7 @@ import sys
 PORT = int(os.environ.get("PORT", 5173))
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "dist"))
 
-class GPGPUStudioHandler(http.server.SimpleHTTPRequestHandler):
+class GPGPUHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=ROOT, **kwargs)
 
@@ -39,9 +39,9 @@ class GPGPUStudioHandler(http.server.SimpleHTTPRequestHandler):
 
 def run():
     server_address = ("127.0.0.1", PORT)
-    httpd = http.server.HTTPServer(server_address, GPGPUStudioHandler)
+    httpd = http.server.HTTPServer(server_address, GPGPUHandler)
     print("\n======================================================")
-    print("  GPGPU Compute Studio Server is running!")
+    print("  GPGPU Server is running!")
     print(f"  URL: http://localhost:{PORT}")
     print(f"  Serving assets from: {ROOT}")
     print("  Cross-Origin Isolation enabled (COOP/COEP)")

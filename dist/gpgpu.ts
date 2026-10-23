@@ -1,5 +1,76 @@
 /**
- * GPGPU Studio - Unified GPU Compute Engine
+ * GPGPU - Unified GPU Compute Engine
+ * Supports 10 GPGPU Paradigms:
+ *  1. AMD ROCm (HIP / AMDGPU)
+ *  2. WebGPU (Native WGSL)
+ *  3. NVIDIA CUDA / AMD HIP (C++)
+ *  4. OpenCL C (OpenCL 2.0 / 3.0)
+ *  5. Vulkan Compute (GLSL 450 / SPIR-V)
+ *  6. OpenGL Compute (GLSL 430 / SPIR-V)
+ *  7. Apple Metal (MSL)
+ *  8. SYCL 2020 (oneAPI / AdaptiveCpp)
+ *  9. OpenMP & OpenACC (GPU Offload Directives)
+ * 10. OpenAI Triton (Python GPU DSL)
+ */
+
+export type FrameworkKey =
+  | 'rocm'
+  | 'webgpu'
+  | 'cuda_hip'
+  | 'opencl'
+  | 'vulkan'
+  | 'opengl'
+  | 'metal'
+  | 'sycl'
+  | 'openmp'
+  | 'triton';
+
+export interface BufferBinding {
+  binding: number;
+  name?: string;
+  access: 'read' | 'read_write';
+  type: 'f32' | 'u32' | 'i32';
+}
+
+export interface FrameworkConfig {
+  name: string;
+  shortName: string;
+  badge: string;
+  lang: string;
+  repo: string;
+  samples: Record<string, string>;
+}
+
+export interface TranspileResult {
+  kernelName: string;
+  wgsl: string;
+  bindings: BufferBinding[];
+}
+
+export interface ExecutionResult {
+  kernelName: string;
+  wgsl: string;
+  durationMs: number;
+}
+
+declare global {
+  interface Window {
+    glslang?: () => Promise<any>;
+    twgsl?: (url?: string) => Promise<any>;
+    editor?: any;
+    monacoEditor?: any;
+    monaco?: any;
+    xtermInstance?: any;
+    latestShaderWGSL?: string;
+    latestShaderSPV?: Uint8Array | Uint32Array;
+    wgpuDevice?: GPUDevice;
+    getSelectedGPUAdapter?: () => Promise<any>;
+    executeActiveFramework?: (target?: string, code?: string) => Promise<void>;
+  }
+}
+
+/**
+ * GPGPU - Unified GPU Compute Engine
  * Supports 10 GPGPU Paradigms:
  *  1. AMD ROCm (HIP / AMDGPU)
  *  2. WebGPU (Native WGSL)
@@ -1062,7 +1133,7 @@ def softmax_kernel(output_ptr, input_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
 
     for (let i = 0; i < effectiveBindings.length; i++) {
       const b = effectiveBindings[i];
-      let data;
+      let data: any;
       if (b.type === 'u32') {
         data = new Uint32Array(numElements);
         for (let j = 0; j < numElements; j++) {
@@ -1105,14 +1176,14 @@ def softmax_kernel(output_ptr, input_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
       compute: { module: shaderModule, entryPoint: kernelName }
     });
 
-    let bindGroup = null;
+    let bindGroup: any = null;
     if (bindGroupEntries.length > 0) {
       try {
         bindGroup = device.createBindGroup({
           layout: pipeline.getBindGroupLayout(0),
           entries: bindGroupEntries
         });
-      } catch (bgErr) {
+      } catch (bgErr: any) {
         xterm.writeln(`${ESC}[1;90m[INFO] Bind group creation bypassed: ${bgErr.message}${ESC}[0m`);
       }
     }
@@ -1129,7 +1200,7 @@ def softmax_kernel(output_ptr, input_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
     passEncoder.dispatchWorkgroups(Math.max(1, Math.ceil(numElements / 64)), 1, 1);
     passEncoder.end();
 
-    const stagingBuffers = [];
+    const stagingBuffers: any[] = [];
     for (let i = 0; i < effectiveBindings.length; i++) {
       if (effectiveBindings[i].access === 'read_write') {
         const staging = device.createBuffer({
@@ -1143,11 +1214,11 @@ def softmax_kernel(output_ptr, input_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
 
     device.queue.submit([commandEncoder.finish()]);
 
-    const results = [];
+    const results: any[] = [];
     for (const s of stagingBuffers) {
       await s.buffer.mapAsync(GPUMapMode.READ);
       const bType = effectiveBindings[s.idx] ? effectiveBindings[s.idx].type : 'f32';
-      let data;
+      let data: any;
       if (bType === 'u32') {
         data = new Uint32Array(s.buffer.getMappedRange().slice(0));
       } else if (bType === 'i32') {
@@ -1170,7 +1241,7 @@ def softmax_kernel(output_ptr, input_ptr, n_elements, BLOCK_SIZE: tl.constexpr):
       const outData = out.data;
 
       // Check if this buffer contains printable ASCII character text
-      let asciiChars = [];
+      let asciiChars: string[] = [];
       let isText = false;
       if (out.type === 'u32' || out.type === 'i32') {
         for (let k = 0; k < Math.min(64, numElements); k++) {
@@ -2001,10 +2072,10 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
   }
 
   function injectStyles() {
-    if (document.getElementById('gpgpu-studio-styles')) return;
+    if (document.getElementById('gpgpu-custom-styles')) return;
 
     const styleEl = document.createElement('style');
-    styleEl.id = 'gpgpu-studio-styles';
+    styleEl.id = 'gpgpu-custom-styles';
     styleEl.textContent = `
       :root {
         --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -2702,7 +2773,6 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     brandEl.innerHTML = `
       <div class="gpgpu-brand-left">
         <div class="gpgpu-logo-text">GPGPU</div>
-        <div class="gpgpu-version-tag">STUDIO</div>
       </div>
       <div class="gpgpu-theme-switcher" role="radiogroup" aria-label="Theme Toggle">
         <button type="button" id="theme-btn-light" class="gpgpu-theme-option ${currentTheme === 'light' ? 'active' : ''}" title="Switch to Light Theme">
@@ -2719,7 +2789,7 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     const subtitleRow = document.createElement('div');
     subtitleRow.className = 'gpgpu-subtitle-row';
     subtitleRow.innerHTML = `
-      <span style="font-weight:500;">Multi-Paradigm GPU Studio</span>
+      <span style="font-weight:500;">Multi-Paradigm GPU Compute</span>
       <div class="gpgpu-live-badge">
         <span class="gpgpu-pulse-dot"></span>
         <span>WebGPU Native</span>
@@ -3149,7 +3219,7 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
     });
 
     // Intercept ANY Run button click via capture phase before Svelte
-    document.addEventListener('click', async (e) => {
+    document.addEventListener('click', async (e: any) => {
       const btn = e.target.closest('button.gpgpu-hero-run-btn, button.svelte-1n31lag, button.bg-blue-500, button.bg-white');
       if (!btn) return;
       if (btn.closest('details')) return; // ignore GPU selector buttons inside details
@@ -3304,14 +3374,20 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
                            code.match(/fn\s+([A-Za-z0-9_]+)\s*\(/);
         kernelName = entryMatch ? entryMatch[1] : 'main';
 
-        const bufMatches = [...code.matchAll(/@binding\s*\(\s*(\d+)\s*\)\s*var<\s*(storage|uniform)(?:,\s*(read|read_write))?\s*>\s*([A-Za-z0-9_]+)/g)];
+        const bufMatches = [...code.matchAll(/@binding\s*\(\s*(\d+)\s*\)\s*var<\s*(storage|uniform)(?:,\s*(read|read_write))?\s*>\s*([A-Za-z0-9_]+)(?:\s*:\s*([^;]+))?/g)];
         if (bufMatches.length > 0) {
-          bindings = bufMatches.map(m => ({
-            binding: parseInt(m[1]),
-            access: m[3] || (m[2] === 'uniform' ? 'read' : 'read_write'),
-            type: 'f32',
-            name: m[4]
-          }));
+          bindings = bufMatches.map(m => {
+            const rawType = m[5] || '';
+            let bType: 'f32' | 'u32' | 'i32' = 'f32';
+            if (/\b(u32|vec\d<u32>)\b/.test(rawType)) bType = 'u32';
+            else if (/\b(i32|vec\d<i32>)\b/.test(rawType)) bType = 'i32';
+            return {
+              binding: parseInt(m[1]),
+              access: m[3] || (m[2] === 'uniform' ? 'read' : 'read_write'),
+              type: bType,
+              name: m[4]
+            };
+          });
         } else {
           bindings = [
             { binding: 0, access: 'read', type: 'f32', name: 'inA' },
@@ -3370,14 +3446,23 @@ fn main(@builtin(global_invocation_id) global_id: vec3<u32>) {
         const tintEntryMatch = wgsl.match(/@compute\s+(?:@workgroup_size\([^)]*\)\s+)*fn\s+([A-Za-z0-9_]+)/);
         kernelName = tintEntryMatch ? tintEntryMatch[1] : 'main';
 
-        const bufMatches = [...code.matchAll(/binding\s*=\s*(\d+)\s*\)\s*(readonly|writeonly)?\s*buffer\s+([A-Za-z0-9_]+)/g)];
+        const bufMatches = [...code.matchAll(/layout\s*\([^)]*binding\s*=\s*(\d+)[^)]*\)\s*(readonly|writeonly)?\s*buffer\s+([A-Za-z0-9_]+)(?:\s*\{([^}]+)\})?/g)];
         if (bufMatches.length > 0) {
-          bindings = bufMatches.map(m => ({
-            binding: parseInt(m[1]),
-            access: m[2] === 'readonly' ? 'read' : 'read_write',
-            type: 'f32',
-            name: m[3]
-          }));
+          bindings = bufMatches.map(m => {
+            const blockContent = m[4] || '';
+            let bType: 'f32' | 'u32' | 'i32' = 'f32';
+            if (/\b(uint|uvec\d|atomic_uint)\b/.test(blockContent)) {
+              bType = 'u32';
+            } else if (/\b(int|ivec\d)\b/.test(blockContent)) {
+              bType = 'i32';
+            }
+            return {
+              binding: parseInt(m[1]),
+              access: m[2] === 'readonly' ? 'read' : 'read_write',
+              type: bType,
+              name: m[3]
+            };
+          });
         } else {
           bindings = [
             { binding: 0, access: 'read', type: 'f32', name: 'InputA' },

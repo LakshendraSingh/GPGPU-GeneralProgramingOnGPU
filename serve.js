@@ -90,7 +90,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`\n======================================================`);
-  console.log(`  GPGPU Compute Studio Server is running!`);
+  console.log(`  GPGPU Server is running!`);
   console.log(`  URL: http://localhost:${PORT}`);
   console.log(`  Serving assets from: ${ROOT}`);
   console.log(`  Cross-Origin Isolation enabled (COOP/COEP)`);
