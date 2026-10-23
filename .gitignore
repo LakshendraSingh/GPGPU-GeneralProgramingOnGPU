@@ -10,4 +10,8 @@
 !clspv
 clspv/third_party
 !emcc
+!dist
+dist/*.webc
+!serve.js
+!serve.py
 !README.md

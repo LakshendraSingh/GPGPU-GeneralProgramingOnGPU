@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" class="dark" style="background-color: #000000; color: #ffffff;">
+
+<head>
+	<meta charset="utf-8" />
+	<link rel="icon" href="./favicon.png" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
+		<link href="./_app/immutable/assets/0.D5hNcJ6K.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/2.C83Slh0X.css" rel="stylesheet">
+		<link href="./_app/immutable/assets/Monaco.BXE7G3-b.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.lxSz_Q-p.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/entry.VsCRy9Wz.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/runtime.xh2qDP5C.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index-client.DuOsW1Kq.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.DpMWlymG.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/render.DbvF1B_J.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/disclose-version.RTEs8xEL.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.DwEStP_x.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.NpoBefLQ.js"><!--[--><meta name="description" content="Multi-Paradigm GPGPU Studio: Run ROCm, WebGPU, CUDA, OpenCL, Vulkan, OpenGL, Metal, SYCL, OpenMP, and Triton with WebGPU"><!--]--><title>GPGPU: Run GPU Compute Code in Browser with WebGPU</title>
+	<noscript>
+		<style>
+			.nojs-hidden {display: none;}
+		</style>
+	</noscript>
+	<style>
+		html, body {
+			background-color: #000000 !important;
+			color: #ffffff !important;
+			margin: 0;
+			padding: 0;
+		}
+		small.nojs-hidden, select.nojs-hidden { display: none !important; }
+		/* High contrast monochrome overrides for all components */
+		.dark\:bg-slate-900, .dark\:bg-black, .bg-slate-900, .md\:w-72 {
+			background-color: #000000 !important;
+		}
+		.bg-green-200, .dark\:bg-green-900, .bg-blue-500, .dark\:bg-blue-900, .bg-blue-200, .bg-orange-200, .dark\:bg-orange-950, .bg-fuchsia-200, .dark\:bg-fuchsia-950, .bg-sky-200, .dark\:bg-sky-900 {
+			background-color: #18181b !important;
+			color: #ffffff !important;
+			border-color: #3f3f46 !important;
+		}
+		.text-green-950, .dark\:text-green-100, .text-blue-800, .dark\:text-blue-300, .text-orange-700, .dark\:text-orange-300, .text-orange-950, .dark\:text-orange-200 {
+			color: #f4f4f5 !important;
+		}
+		.hover\:bg-blue-700:hover, .hover\:bg-red-700:hover {
+			background-color: #27272a !important;
+		}
+		.svelte-1n31lag button, button.svelte-1n31lag {
+			border: 1px solid #3f3f46 !important;
+			background: #18181b !important;
+			color: #ffffff !important;
+		}
+		.svelte-1n31lag button:hover, button.svelte-1n31lag:hover {
+			background: #27272a !important;
+			border-color: #71717a !important;
+		}
+	</style>
+</head>
+
+<body data-sveltekit-preload-data="hover" class="dark" style="background-color: #000000; color: #ffffff; margin: 0; padding: 0;">
+	<div style="display: contents"><!--[--><!--[--><!----><!----><div class="flex w-full flex-col-reverse md:h-screen md:flex-row"><div class="flex h-full flex-1 flex-col justify-between overflow-hidden"><div class="flex min-h-[60vh] flex-1 flex-col md:min-h-0"><!----><!----></div> <div style="background: #000000" class="h-[424px] p-2 pr-0"></div></div> <div class="md:w-72"><div class="flex h-full flex-col overflow-hidden p-2 dark:bg-black dark:text-white"><h1 class="text-center text-3xl font-[650]">GPGPU</h1> <p class="text-center font-medium leading-tight">Multi-Paradigm GPU Compute Studio</p> <p class="text-center font-[425] text-xs text-zinc-400">ROCm • WebGPU • CUDA • OpenCL • Vulkan • Metal • SYCL • OpenMP • Triton</p> <noscript><p class="mb-2 mt-8 text-center text-3xl font-bold">JavaScript Required</p></noscript> <!--[!--><details open class="nojs-hidden"><summary class="text-2xl font-semibold">Select GPU</summary> <div class="grid space-x-2 font-medium  svelte-1n31lag"><!--[--><!--]--></div> <p class="font-medium">GPU Information</p> <ul class="mb-2"><!--[--><!--]--></ul></details> <button class="nojs-hidden w-full rounded px-4 py-2 font-bold bg-white text-black hover:bg-zinc-200 svelte-1n31lag"><!--[!-->Run<!--]--></button><!--]--> <!--[!--><!--]--> <!--[!--><!--]--></div><!----></div></div><!----><!----><!----><!--]--> <!--[!--><!--]--><!--]-->
+			
+			<script>
+				{
+					__sveltekit_19dt2mz = {
+						base: new URL(".", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					Promise.all([
+						import("./_app/immutable/entry/start.lxSz_Q-p.js"),
+						import("./_app/immutable/entry/app.DpMWlymG.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data: [null,null],
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+	<script src="./twgsl.js?v=23"></script>
+	<script src="./glslang.js?v=23"></script>
+	<script src="./gpgpu_studio.js?v=23"></script>
+</body>
+
+</html>

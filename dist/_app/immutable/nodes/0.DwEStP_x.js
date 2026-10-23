@@ -1,0 +1,2 @@
+import{c as s,a as i}from"../chunks/disclose-version.RTEs8xEL.js";import{b as p,E as c,d as f,n as l,f as u,h as d,g as _,p as m,i as h,j as v}from"../chunks/runtime.xh2qDP5C.js";function y(n,e,...a){var r=n,o=l,t;p(()=>{o!==(o=e())&&(t&&(u(t),t=null),t=f(()=>o(r,...a)))},c),d&&(r=_)}const b=!0,T=Object.freeze(Object.defineProperty({__proto__:null,prerender:b},Symbol.toStringTag,{value:"Module"}));function j(n,e){m(e,!0);var a=s(),r=h(a);y(r,()=>e.children),i(n,a),v()}export{j as component,T as universal};
+//# sourceMappingURL=0.DwEStP_x.js.map

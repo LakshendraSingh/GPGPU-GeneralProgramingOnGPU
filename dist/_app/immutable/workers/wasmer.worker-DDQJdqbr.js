@@ -1,0 +1,2 @@
+Error.stackTraceLimit=50;globalThis.onerror=console.error;let o=[],a,m=async e=>{a?await a.handle(e):o.push(e)};globalThis.onmessage=async e=>{if(e.data.type=="init"){const{memory:r,module:i,id:l,sdkUrl:s}=e.data,{init:t,ThreadPoolWorker:n}=await import(s);await t({module:i,sdkUrl:s,memory:r}),a=new n(l);for(const d of o.splice(0,o.length))await a.handle(d)}else await m(e.data)};
+//# sourceMappingURL=wasmer.worker-DDQJdqbr.js.map
